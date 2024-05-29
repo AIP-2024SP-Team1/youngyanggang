@@ -5,10 +5,10 @@ cur_dir = os.path.dirname(os.path.realpath(__file__))
 
 beta = 1.0
 attribute = 'mQG'
-ori_data_dir = '{}/data/ftqa_data.pkl'.format(cur_dir)
+ori_data_dir = '{}/data/ftqa_data.pkl'.format(cur_dir) # 어디에 사용하는 config인지 확인 필요
 reload_data=True
 loss_n = 'ce_mqs'
-data_check_dir = '{}/data1/{}'.format(cur_dir, attribute)
+data_check_dir = '/data'
 output_dir='{}/checkpoint/{}/output_dir/'.format(cur_dir, attribute)
 model_name_or_path = 'facebook/bart-large'
 tokenizer_name = 'facebook/bart-large'
@@ -22,7 +22,7 @@ max_target_length=128
 val_max_target_length=128
 test_max_target_length=128
 eval_batch_size=4
-cache_dir='pretrained'
+cache_dir='pretrained' # 어디에 사용하는 config인지 확인 필요
 path_or_data='data'
 
 cmd_str = 'python {} \
