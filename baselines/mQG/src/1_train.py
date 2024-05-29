@@ -261,7 +261,7 @@ class mQG(BaseTransformer):
 
         logs = {name: loss for name, loss in zip(self.loss_names, loss_tensors)}
         # tokens per batch
-        logs["tpb"] = batch["input_ids"].ne(self.pad).sum() + batch["labels"].ne(self.pad).sum()
+        logs["tpb"] = (batch["input_ids"].ne(self.pad).sum() + batch["labels"].ne(self.pad).sum()).float()
         for k in logs.keys():
             self.log(k, logs[k], prog_bar=True, logger=True)
 
@@ -492,26 +492,50 @@ def main(args, model=None) -> mQG:
     else:
         es_callback = False
 
-    trainer: pl.Trainer = generic_train(
-        model,
-        args,
-        logging_callback=Seq2SeqLoggingCallback(),
-        checkpoint_callback= pl.callbacks.ModelCheckpoint(
-            dirpath=args.output_dir, 
-            monitor=model.val_metric, 
-            mode="min", 
-            save_top_k=args.save_top_k,
-            filename='{epoch}'
-        ),
-        early_stopping_callback=es_callback,
-        logger=logger,
-        # accumulate_grad_batches=2,
-        sync_batchnorm=True,
-        check_val_every_n_epoch=1,
-        num_sanity_val_steps=0,
-        # fast_dev_run=7,
-        reload_dataloaders_every_epoch=args.reload_data,
-    )
+    if torch.cuda.is_available():
+        trainer: pl.Trainer = generic_train(
+            model,
+            args,
+            logging_callback=Seq2SeqLoggingCallback(),
+            checkpoint_callback= pl.callbacks.ModelCheckpoint(
+                dirpath=args.output_dir, 
+                monitor=model.val_metric, 
+                mode="min", 
+                save_top_k=args.save_top_k,
+                filename='{epoch}'
+            ),
+            early_stopping_callback=es_callback,
+            logger=logger,
+            # accumulate_grad_batches=2,
+            sync_batchnorm=True,
+            check_val_every_n_epoch=1,
+            num_sanity_val_steps=0,
+            # fast_dev_run=7,
+            reload_dataloaders_every_epoch=args.reload_data,
+        )
+    else:
+        trainer: pl.Trainer = generic_train(
+            model,
+            args,
+            logging_callback=Seq2SeqLoggingCallback(),
+            checkpoint_callback= pl.callbacks.ModelCheckpoint(
+                dirpath=args.output_dir, 
+                monitor=model.val_metric, 
+                mode="min", 
+                save_top_k=args.save_top_k,
+                filename='{epoch}'
+            ),
+            early_stopping_callback=es_callback,
+            logger=logger,
+            # accumulate_grad_batches=2,
+            sync_batchnorm=True,
+            check_val_every_n_epoch=1,
+            num_sanity_val_steps=0,
+            # fast_dev_run=7,
+            reload_dataloaders_every_epoch=args.reload_data,
+            accelerator='cpu',  # CPU 사용 설정
+            devices=1
+        )
 #     pickle_save(model.hparams, model.output_dir / "hparams.pkl")
     if not args.do_predict:
         return model
