@@ -22,7 +22,7 @@ max_target_length=128
 val_max_target_length=128
 test_max_target_length=128
 eval_batch_size=4
-cache_dir='pretrained' # 어디에 사용하는 config인지 확인 필요
+cache_dir='pretrained' # Where do you want to store the pre-trained models downloaded from s3
 path_or_data='data'
 
 cmd_str = 'python {} \
