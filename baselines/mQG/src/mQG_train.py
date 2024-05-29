@@ -5,7 +5,7 @@ cur_dir = os.path.dirname(os.path.realpath(__file__))
 
 beta = 1.0
 attribute = 'mQG'
-ori_data_dir = '{}/data/ftqa_data.pkl'.format(cur_dir) # LegacySeq2SeqDataset 초기화 해서 데이터셋 정의할 때 kwargs로 들어감
+ori_data_dir = '/data/ftqa_data.pkl' # LegacySeq2SeqDataset 초기화 해서 데이터셋 정의할 때 kwargs로 들어감
 reload_data=True
 loss_n = 'ce_mqs'
 reload_data=True
