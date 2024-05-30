@@ -33,3 +33,6 @@ for data in json_data:
         output = ", ".join(output)
     data['output'] = output
 
+
+with open('ftqa_wh_train1.json', 'w') as json_file:
+    json.dump(json_data, json_file, indent=4)
