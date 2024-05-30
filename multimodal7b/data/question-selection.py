@@ -111,7 +111,7 @@ def ranking(context, questions):
 
 torch.cuda.empty_cache()
 
-with open('../../data/ftqa_wh_train.json') as f:
+with open('./data/ftqa_wh_train.json') as f:
     data = json.load(f)
 
 contexts = []
@@ -132,7 +132,7 @@ tmp = pd.DataFrame({
     'selected': selected
 })
 
-tmp.to_csv('../../output/tmp.csv')
+tmp.to_csv('./output/tmp.csv')
 
 """for obj in data:
     context = obj['input']
