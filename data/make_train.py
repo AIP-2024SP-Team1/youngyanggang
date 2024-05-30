@@ -24,3 +24,12 @@ for _, row in df.iterrows():
             "section_id": row['section_id']
         }
         id+=1
+
+json_data = [value for value in data_dict.values()]
+
+for data in json_data:
+    output = data['output']
+    if type(output) == list:
+        output = ", ".join(output)
+    data['output'] = output
+
