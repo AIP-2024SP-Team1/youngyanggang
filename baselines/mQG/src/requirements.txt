@@ -7,3 +7,4 @@ transformers==4.21.1
 joblib
 rouge-score
 sacrebleu
+openpyxl # excel 파일 읽고 generate하기 위해 필요
