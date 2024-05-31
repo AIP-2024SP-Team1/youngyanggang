@@ -1,3 +1,17 @@
+# torch와 torchvision은 아래 명령어로 따로 다운 받아야 함
+# pip install torch==2.3.0+cu118 torchvision==0.18.0+cu118 -f https://download.pytorch.org/whl/torch_stable.html
 spacy==3.5.2
-torch==1.12.0
 pytorch-lightning==1.7.7
+torchmetrics==0.10.0
+transformers==4.21.1
+joblib
+rouge-score
+sacrebleu
+openpyxl # excel 파일 읽고 generate하기 위해 필요
+pandas
+datasets,
+pytorch-ignite
+bert_score
+evaluate
+# bleurt를 위해 아래 명령어도 실행해주어야 함
+# pip install git+https://github.com/google-research/bleurt.git

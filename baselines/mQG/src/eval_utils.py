@@ -3,6 +3,7 @@ import os
 import re
 import sys
 from evaluate import load
+#from datasets import load_metric
 from ignite.metrics import Bleu
 from torchmetrics.text.rouge import ROUGEScore
 from typing import Callable, Dict, Iterable, List, Union, Tuple
@@ -39,16 +40,22 @@ def rougel_eval(df):
     
     return rougel_list
 
-def selfbleu_eval(df):
-    m = Bleu(smooth='smooth1')
 
-    for j in df.index:
-        tokenized_preds = tokenize(df.loc[j, 'tot_gen'])
-        for p in range(len(df.loc[j, 'tot_gen'])):
-            temp = tokenized_preds.copy()
-            temp.pop(p)
+def selfbleu_eval(df):
+    # Initialize BLEU metric object
+    m = Bleu(smooth='smooth1')
+    
+    # Iterate over DataFrame rows
+    for index, row in df.iterrows():
+        # Tokenize the predictions
+        tokenized_preds = tokenize(row['tot_gen'])
+        
+        # Calculate Self-BLEU
+        for p in range(len(tokenized_preds)):
+            temp = tokenized_preds[:p] + tokenized_preds[p+1:]
             m.update(([tokenized_preds[p]], [temp]))
-            
+    
+    # Compute the final BLEU score
     bleu_list = m.compute().item()
     print('Self-BLEU:', bleu_list)
     
