@@ -29,16 +29,15 @@ def tokenize(x):
 
 def rougel_eval(df):
     rouge = ROUGEScore(use_stemmer=True, rouge_keys='rougeL', accumulate='best')
-    rouge_scores = []
     
-    for index, row in df.iterrows():
-        predictions = [row['tot_gen']]
-        references = [row['question']]
-        rouge.update((predictions, references))
+    for j in df.index:
+        for c in df.loc[j, 'question']:
+            rouge(c, [df.loc[j, 'tot_gen']])
+            
+    rougel_list = rouge.compute()
+    print('rouge-L:', rougel_list)
     
-    rougel_result = rouge.compute()
-    print('rouge-L:', rougel_result)
-    return rougel_result
+    return rougel_list
 
 
 def selfbleu_eval(df):
