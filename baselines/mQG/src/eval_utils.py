@@ -2,8 +2,8 @@ import pandas as pd
 import os
 import re
 import sys
-#from evaluate import load
-from datasets import load_metric
+from evaluate import load
+#from datasets import load_metric
 from ignite.metrics import Bleu
 from torchmetrics.text.rouge import ROUGEScore
 from typing import Callable, Dict, Iterable, List, Union, Tuple
@@ -57,7 +57,7 @@ def selfbleu_eval(df):
     return bleu_list
 
 def bertscore_eval(df):
-    bertscore = load_metric("bertscore")
+    bertscore = load("bertscore")
     results = []
 
     for j in df.index:
@@ -72,7 +72,7 @@ def bertscore_eval(df):
     return score
     
 def bleurt_eval(df):
-    bleurt = load_metric("bleurt", "bleurt-20", module_type="metric")
+    bleurt = load("bleurt", "bleurt-20", module_type="metric")
     results = []
 
     for j in df.index:
