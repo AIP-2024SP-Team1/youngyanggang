@@ -167,8 +167,8 @@ def chunks(lst, n):
         yield lst[i : i + n]
 
 def run_generate():    
-    model: mQG = mQG(args)
-    model = model.load_from_checkpoint(args.ckpt_path)
+    #model: mQG = mQG(args)
+    model = mQG.load_from_checkpoint(args.ckpt_path)
     model.eval()
     model.to('cuda:{}'.format(args.device))
     
