@@ -31,9 +31,9 @@ def get_args_parser():
     # Model parameters
     parser.add_argument('--llama_type', default='7B', type=str,
                         help='Type of LLaMA model') #
-    parser.add_argument('--llama_path', default='/path/to/llama', type=str,
+    parser.add_argument('--llama_path', default='./model/', type=str,
                         help='path to LLaMA pretrained checkpoint')
-    parser.add_argument('--pretrained_path', default='/path/to/pretrained', type=str,
+    parser.add_argument('--pretrained_path', default='./ckpts/7fa55208379faf2dd862565284101b0e4a2a72114d6490a95e432cf9d9b6c813_BIAS-7B.pth', type=str,
                         help='path to checkpoint from pretrain stage')
     parser.add_argument('--max_words', default=512, type=int,
                         help='max number of input words')
@@ -53,8 +53,8 @@ def get_args_parser():
                         help='epochs to warmup LR')
 
     # Dataset parameters
-    parser.add_argument('--data_config', default='configs/data/finetune/EN.yaml', type=str,
-                        help='dataset config path')
+    parser.add_argument('--train_config', default='./data/finetune/finetune_train_config.yaml', type=str,
+                        help='train dataset config path')
     parser.add_argument('--num_workers', default=4, type=int)
     parser.add_argument('--pin_mem', action='store_true',
                         help='Pin CPU memory in DataLoader for more efficient (sometimes) transfer to GPU.')
@@ -86,6 +86,7 @@ def get_args_parser():
 
 
 def main(args):
+    torch.cuda.empty_cache()
     misc.init_distributed_mode(args)
 
     print('job dir: {}'.format(os.path.dirname(os.path.realpath(__file__))))
