@@ -42,15 +42,20 @@ def rougel_eval(df):
 
 
 def selfbleu_eval(df):
+    # Initialize BLEU metric object
     m = Bleu(smooth='smooth1')
-
-    for j in df.index:
-        tokenized_preds = tokenize(df.loc[j, 'tot_gen'])
-        for p in range(len(df.loc[j, 'tot_gen'])):
-            temp = tokenized_preds.copy()
-            temp.pop(p)
+    
+    # Iterate over DataFrame rows
+    for index, row in df.iterrows():
+        # Tokenize the predictions
+        tokenized_preds = tokenize(row['tot_gen'])
+        
+        # Calculate Self-BLEU
+        for p in range(len(tokenized_preds)):
+            temp = tokenized_preds[:p] + tokenized_preds[p+1:]
             m.update(([tokenized_preds[p]], [temp]))
-            
+    
+    # Compute the final BLEU score
     bleu_list = m.compute().item()
     print('Self-BLEU:', bleu_list)
     
