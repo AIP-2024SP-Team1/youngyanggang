@@ -1,0 +1,34 @@
+import pandas as pd
+import json
+
+file_path = './ftqa_wh_2_test1.xlsx'
+df = pd.read_excel(file_path)
+
+data_dict = {}
+id=0
+
+for _, row in df.iterrows():
+    cor_section = row['cor_section']
+    question = row['question']
+
+    data_dict[id] = {
+        "id": id,
+        "instruction": "Generate appropriate multiple questions considering the context of the input. The interrogative word of the question should be one of the following seven: [what, when, where, which, who, why, how].",
+        "input": cor_section,
+        "output": [question],
+        "book_name": row['book_name'],
+        "section_id": row['section_id']
+    }
+    id+=1
+
+json_data = [value for value in data_dict.values()]
+
+for data in json_data:
+    output = data['output']
+    if type(output) == list:
+        output = ", ".join(output)
+    data['output'] = output
+
+
+with open('ftqa_wh_test.json', 'w') as json_file:
+    json.dump(json_data, json_file, indent=4)
