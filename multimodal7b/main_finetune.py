@@ -55,6 +55,8 @@ def get_args_parser():
     # Dataset parameters
     parser.add_argument('--train_config', default='./data/finetune/finetune_train_config.yaml', type=str,
                         help='train dataset config path')
+    parser.add_argument('--val_config', default='./data/finetune/finetune_val_config.yaml', type=str,
+                        help='validation dataset config path')
     parser.add_argument('--num_workers', default=4, type=int)
     parser.add_argument('--pin_mem', action='store_true',
                         help='Pin CPU memory in DataLoader for more efficient (sometimes) transfer to GPU.')
@@ -75,6 +77,7 @@ def get_args_parser():
                         help='start epoch')
 
     # distributed training parameters
+    parser.add_argument('--distributed', default=True)
     parser.add_argument('--world_size', default=1, type=int,
                         help='number of distributed processes')
     parser.add_argument('--local_rank', default=-1, type=int)
@@ -138,7 +141,6 @@ def main(args):
 
     misc.load_model(model_without_ddp, args.pretrained_path)
 
-
     dataset_train = FinetuneDataset(args.data_config, transform=transform_train,
                                 max_words=args.max_words, tokenizer_path=llama_tokenzier_path)
     print(dataset_train)
@@ -155,6 +157,12 @@ def main(args):
         num_workers=args.num_workers,
         pin_memory=args.pin_mem,
         drop_last=True,
+    )
+    dataset_val = FinetuneDataset(args.val_config, transform=transform_train,
+                              max_words=args.max_words, tokenizer_path=llama_tokenzier_path)
+    data_loader_val = torch.utils.data.DataLoader(
+        dataset_val, batch_size=args.batch_size,
+        num_workers=args.num_workers, pin_memory=args.pin_mem
     )
 
     # SummaryWrite
@@ -182,6 +190,11 @@ def main(args):
             misc.save_model(
                 args=args, model=model, model_without_ddp=model_without_ddp, optimizer=optimizer,
                 loss_scaler=loss_scaler, epoch=epoch)
+        
+        if args.distributed:
+            val_loss = model.module.validate(data_loader_val, device)
+        else:
+            val_loss = model.validate(data_loader_val, device)
 
         log_stats = {**{f'train_{k}': v for k, v in train_stats.items()},
                      'epoch': epoch,
