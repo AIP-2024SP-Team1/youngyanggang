@@ -35,7 +35,7 @@ def get_args_parser():
                         help='path to LLaMA pretrained checkpoint')
     parser.add_argument('--pretrained_path', default='./ckpts/7fa55208379faf2dd862565284101b0e4a2a72114d6490a95e432cf9d9b6c813_BIAS-7B.pth', type=str,
                         help='path to checkpoint from pretrain stage')
-    parser.add_argument('--max_words', default=512, type=int,
+    parser.add_argument('--max_words', default=1024, type=int,
                         help='max number of input words')
 
     # Optimizer parameters
@@ -158,6 +158,7 @@ def main(args):
         pin_memory=args.pin_mem,
         drop_last=True,
     )
+
     dataset_val = FinetuneDataset(args.val_config, transform=transform_train,
                               max_words=args.max_words, tokenizer_path=llama_tokenzier_path)
     data_loader_val = torch.utils.data.DataLoader(
@@ -198,7 +199,7 @@ def main(args):
 
         log_stats = {**{f'train_{k}': v for k, v in train_stats.items()},
                      'epoch': epoch,
-                     **{f'val_{k}': v for k, v in train_stats.items()}}
+                     **{f'val': val_loss}}
 
         if args.output_dir and misc.is_main_process():
             if log_writer is not None:

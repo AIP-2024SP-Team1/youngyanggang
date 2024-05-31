@@ -272,6 +272,19 @@ class LLaMA_adapter(nn.Module):
             decoded.append(self.tokenizer.decode(t))
 
         return decoded
+    
+    def validate(self, data_loader, device):
+        self.eval()
+        val_loss = 0
+        with torch.no_grad():
+            for input, target, input2_mask, img in data_loader:
+                input = input.to(device)
+                target = target.to(device)
+                img = img.to(device)
+                with torch.cuda.amp.autocast():
+                    loss, _ = self.forward(input, target, img)
+                val_loss += loss.item()
+        return val_loss / len(data_loader)
 
 
 
