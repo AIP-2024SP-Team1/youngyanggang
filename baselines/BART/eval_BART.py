@@ -6,6 +6,7 @@ from bert_score import score as bert_score
 import nltk
 from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
 from tqdm import tqdm
+from bleurt import score as bleurt_score
 
 # Load data
 def load_data(file_path, sample_size=None):
@@ -45,6 +46,12 @@ def calculate_self_bleu(predictions):
         bleu_scores.append(bleu_score)
     return sum(bleu_scores) / len(bleu_scores)
 
+# Calculate BLEURT
+def calculate_bleurt(predictions, references, bleurt_checkpoint='BLEURT-20'):
+    bleurt_scorer = bleurt_score.BleurtScorer(bleurt_checkpoint)
+    scores = bleurt_scorer.score(references=references, candidates=predictions)
+    return sum(scores) / len(scores)
+
 # Main evaluation function
 def evaluate(model, tokenizer, data):
     input_texts = data['context'].tolist()
@@ -59,7 +66,8 @@ def evaluate(model, tokenizer, data):
     results = {
         "ROUGE-L": rouge_l,
         "BERTScore_F1": bertscore_f1,
-        "Self-BLEU": self_bleu
+        "Self-BLEU": self_bleu,
+        "BLEURT": bleurt
     }
     
     return results
