@@ -1,20 +1,19 @@
-import pandas as pd
 import torch
 from transformers import BartTokenizer, BartForConditionalGeneration, Trainer, TrainingArguments
-from datasets import Dataset, load_metric
+from datasets import load_metric
 from rouge_score import rouge_scorer
 import bert_score
 from bleurt import score as bleurt_score
 from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
-
-# Load the dataset
-data = pd.read_csv('/mnt/data/the-ugly-duckling-story.csv')
+from preprocess import preprocess_data
 
 # Preprocess data
-data = data.rename(columns={"input": "context", "output": "question"})
-
-# Create a HuggingFace Dataset
-dataset = Dataset.from_pandas(data)
+train_path = './data/ftqa_wh_2_train.xlsx'
+val_path = './data/ftqa_wh_2_val.xlsx'
+test1_path = './data/ftqa_wh_2_test1.xlsx'
+test2_path = './data/ftqa_wh_2_test2.xlsx'
+output_dir = './data'
+datasets = preprocess_data(train_path, val_path, test1_path, test2_path, output_dir)
 
 # Load BART tokenizer and model
 tokenizer = BartTokenizer.from_pretrained('facebook/bart-base')
@@ -29,7 +28,7 @@ def preprocess_function(examples):
     return model_inputs
 
 # Tokenize data
-tokenized_dataset = dataset.map(preprocess_function, batched=True)
+tokenized_datasets = datasets.map(preprocess_function, batched=True)
 
 # Training arguments
 training_args = TrainingArguments(
@@ -41,6 +40,7 @@ training_args = TrainingArguments(
     weight_decay=0.01,
     logging_dir='./logs',
     logging_steps=10,
+    evaluation_strategy="epoch"
 )
 
 # Evaluation metrics
@@ -82,15 +82,25 @@ def compute_metrics(eval_preds):
 trainer = Trainer(
     model=model,
     args=training_args,
-    train_dataset=tokenized_dataset,
-    eval_dataset=tokenized_dataset,
+    train_dataset=tokenized_datasets['train'],
+    eval_dataset=tokenized_datasets['validation'],
     compute_metrics=compute_metrics
 )
 
 # Train model
 trainer.train()
 
-# Evaluate the model
-results = trainer.evaluate()
+# Evaluate the model on validation set
+val_results = trainer.evaluate()
 
-print(results)
+print("Validation Results:")
+print(val_results)
+
+# Evaluate the model on test1 and test2 sets
+test1_results = trainer.evaluate(eval_dataset=tokenized_datasets['test1'])
+test2_results = trainer.evaluate(eval_dataset=tokenized_datasets['test2'])
+
+print("Test1 Results:")
+print(test1_results)
+print("Test2 Results:")
+print(test2_results)
