@@ -3,7 +3,7 @@ import torch
 from transformers import BartForConditionalGeneration, BartTokenizer
 from datasets import load_metric
 from bert_score import score as bert_score
-
+from tqdm import tqdm
 
 # Load data
 def load_data(file_path, sample_size=None):
@@ -15,7 +15,7 @@ def load_data(file_path, sample_size=None):
 # Generate questions using BART
 def generate_questions(model, tokenizer, input_texts, max_length=50):
     questions = []
-    for text in input_texts:
+    for text in tqdm(input_texts, desc="Generating questions"):
         inputs = tokenizer.encode("Generate question: " + text, return_tensors='pt')
         outputs = model.generate(inputs, max_length=max_length, num_beams=5, early_stopping=True)
         question = tokenizer.decode(outputs[0], skip_special_tokens=True)
