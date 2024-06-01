@@ -62,6 +62,7 @@ def evaluate(model, tokenizer, data):
     rouge_l = calculate_rouge(predictions, references)
     bertscore_f1 = calculate_bertscore(predictions, references)
     self_bleu = calculate_self_bleu(predictions)
+    bleurt = calculate_bleurt(predictions, references, bleurt_checkpoint=bleurt_checkpoint)
     
     results = {
         "ROUGE-L": rouge_l,
