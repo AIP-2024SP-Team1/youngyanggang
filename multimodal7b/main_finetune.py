@@ -24,7 +24,7 @@ def get_args_parser():
     parser = argparse.ArgumentParser('llama_adapterV2 pre-training', add_help=False)
     parser.add_argument('--batch_size', default=16, type=int,
                         help='Batch size per GPU (effective batch size is batch_size * accum_iter * # gpus')
-    parser.add_argument('--epochs', default=20, type=int)
+    parser.add_argument('--epochs', default=10, type=int)
     parser.add_argument('--accum_iter', default=1, type=int,
                         help='Accumulate gradient iterations (for increasing the effective batch size under memory constraints)')
 
@@ -35,7 +35,7 @@ def get_args_parser():
                         help='path to LLaMA pretrained checkpoint')
     parser.add_argument('--pretrained_path', default='./ckpts/7fa55208379faf2dd862565284101b0e4a2a72114d6490a95e432cf9d9b6c813_BIAS-7B.pth', type=str,
                         help='path to checkpoint from pretrain stage')
-    parser.add_argument('--max_words', default=1024, type=int,
+    parser.add_argument('--max_words', default=512, type=int,
                         help='max number of input words')
 
     # Optimizer parameters
@@ -57,7 +57,7 @@ def get_args_parser():
                         help='train dataset config path')
     parser.add_argument('--val_config', default='./data/finetune/finetune_val_config.yaml', type=str,
                         help='validation dataset config path')
-    parser.add_argument('--num_workers', default=4, type=int)
+    parser.add_argument('--num_workers', default=2, type=int)
     parser.add_argument('--pin_mem', action='store_true',
                         help='Pin CPU memory in DataLoader for more efficient (sometimes) transfer to GPU.')
     parser.add_argument('--no_pin_mem', action='store_false', dest='pin_mem')
