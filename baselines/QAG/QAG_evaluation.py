@@ -36,3 +36,18 @@ def rougel_eval(df):
     print('rouge-L:', rougel_list)
     
     return rougel_list
+
+def selfbleu_eval(df):
+    m = Bleu(smooth='smooth1')
+
+    for j in df.index:
+        tokenized_preds = tokenize(df.loc[j, 'tot_gen'])
+        for p in range(len(df.loc[j, 'tot_gen'])):
+            temp = tokenized_preds.copy()
+            temp.pop(p)
+            m.update(([tokenized_preds[p]], [temp]))
+            
+    bleu_list = m.compute().item()
+    print('Self-BLEU:', bleu_list)
+    
+    return bleu_list
