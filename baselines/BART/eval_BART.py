@@ -16,7 +16,7 @@ def load_data(file_path, sample_size=None):
     return data
 
 # Generate questions using BART
-def generate_questions(model, tokenizer, input_texts, max_length=50):
+def generate_questions(model, tokenizer, input_texts, max_length=128):
     questions = []
     for text in tqdm(input_texts, desc="Generating questions"):
         inputs = tokenizer.encode("Generate question: " + text, return_tensors='pt')
@@ -79,7 +79,7 @@ model = BartForConditionalGeneration.from_pretrained(model_name)
 tokenizer = BartTokenizer.from_pretrained(model_name)
 
 # Load your dataset
-data = load_data('./data/preprocessed_test.csv', sample_size=300) 
+data = load_data('./data/preprocessed_test.csv', sample_size=500) 
 
 # Evaluate
 results = evaluate(model, tokenizer, data)
