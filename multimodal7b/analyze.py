@@ -25,3 +25,16 @@ def get_lowest(column_name):
         all_scores.sort(key=lambda x: x[0])
 
     return all_scores[:15]
+
+# 각 점수 컬럼에 대해 최소 15개 점수와 해당하는 generated 결과 및 question 찾기
+lowest_rouge_l = get_lowest('Rouge-L')
+lowest_bertscore = get_lowest('BERTScore')
+lowest_bleurt = get_lowest('BLEURT')
+lowest_selfbleu = get_lowest('Self-BLEU')
+
+columns = ['Score', 'Generated', 'Question']
+lowest_scores_df = pd.DataFrame(lowest_rouge_l + lowest_bertscore + lowest_bleurt + lowest_selfbleu, columns=columns)
+lowest_scores_df['Score_Type'] = ['Rouge-L']*15 + ['BERTScore']*15 + ['BLEURT']*15 + ['Self-BLEU']*15
+
+# 파일 저장
+lowest_scores_df.to_csv('./output/lowest_scores.csv', index=False)
