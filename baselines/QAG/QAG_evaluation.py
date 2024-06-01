@@ -24,3 +24,15 @@ def tokenize(x):
         except:
             continue
     return temp
+
+def rougel_eval(df):
+    rouge = ROUGEScore(use_stemmer=True, rouge_keys='rougeL', accumulate='best')
+    
+    for j in df.index:
+        for c in df.loc[j, 'question']:
+            rouge(c, [df.loc[j, 'tot_gen']])
+            
+    rougel_list = rouge.compute()
+    print('rouge-L:', rougel_list)
+    
+    return rougel_list
