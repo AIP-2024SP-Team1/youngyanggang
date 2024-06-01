@@ -148,6 +148,17 @@ def main(args):
     print('BLEURT Average:', np.mean(list(np.mean(item) for item in bleurt)))
     print('Self-BLEU Average:', np.mean(list(np.mean(item) for item in self_bleu)))
 
+    score = pd.DataFrame({
+        'Rouge-L': rouge_l,
+        'BERTScore': bert_scores,
+        'BLEURT': bleurt,
+        'Self-BLEU': self_bleu
+    })
+
+    merged = pd.concat([data, score], axis=1)
+    merged = merged.drop([merged.columns[0]], axis=1)
+    merged.to_csv('./output/merged(before).csv')
+
 if __name__ == '__main__':
     nltk.download('punkt')
     args = get_args_parser()
