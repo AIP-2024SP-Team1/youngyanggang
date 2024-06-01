@@ -6,8 +6,10 @@ from bert_score import score as bert_score
 
 
 # Load data
-def load_data(file_path):
+def load_data(file_path, sample_size=None):
     data = pd.read_csv(file_path)
+    if sample_size:
+        data = data.sample(n=sample_size, random_state=42)
     return data
 
 # Generate questions using BART
@@ -65,7 +67,7 @@ model = BartForConditionalGeneration.from_pretrained(model_name)
 tokenizer = BartTokenizer.from_pretrained(model_name)
 
 # Load your dataset
-data = load_data('./data/preprocessed_test.csv')
+data = load_data('./data/preprocessed_test.csv', sample_size=100)
 
 # Evaluate
 results = evaluate(model, tokenizer, data)
