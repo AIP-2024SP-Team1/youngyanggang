@@ -1,0 +1,18 @@
+v0:
+max_words 512
+batch_size 4
+instruciton 'an appropriate question'
+train_data 2740
+
+v1:
+max_words 512
+batch_size 4
+instruction 'appropriate multiple questions'
+train_data 5520
++ eval metric 계산 code 새로 작성
+
+v2:
+max_words 1024
+batch_size 2
+instruction 'appropriate multiple questions'
+train_data 5520
