@@ -117,8 +117,8 @@ def main(args):
         for input in context:
             prompt = llama.format_prompt(
                 "Generate appropriate multiple questions considering the context of the input. \
-                Each question should use one of the following interrogative words: [what, when, where, which, who, why, how]. \
-                Ensure the questions are relevant to the given context.", 
+                The interrogative word of the question should be one of the following seven: [what, when, where, which, who, why, how]. \
+                The questions should be varied and cover different aspects of the provided context.", 
                 input
             )
             img = torch.zeros(3, 224, 224)
