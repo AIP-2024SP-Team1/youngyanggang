@@ -22,7 +22,7 @@ from engine_finetune import train_one_epoch
 
 def get_args_parser():
     parser = argparse.ArgumentParser('llama_adapterV2 pre-training', add_help=False)
-    parser.add_argument('--batch_size', default=32, type=int,
+    parser.add_argument('--batch_size', default=16, type=int,
                         help='Batch size per GPU (effective batch size is batch_size * accum_iter * # gpus')
     parser.add_argument('--epochs', default=10, type=int)
     parser.add_argument('--accum_iter', default=1, type=int,
