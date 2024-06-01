@@ -40,9 +40,9 @@ def calculate_bertscore(predictions, references):
 def calculate_self_bleu(predictions):
     smoothing_function = SmoothingFunction().method1
     bleu_scores = []
-    for pred in tqdm(predictions, desc="Calculating Self-BLEU"):
-        other_preds = [p for p in predictions if p != pred]
-        bleu_score = sentence_bleu([other_preds], pred, smoothing_function=smoothing_function)
+    for i, pred in enumerate(tqdm(predictions, desc="Calculating Self-BLEU")):
+        other_preds = [p for j, p in enumerate(predictions) if j != i]
+        bleu_score = sentence_bleu(other_preds, pred, smoothing_function=smoothing_function)
         bleu_scores.append(bleu_score)
     return sum(bleu_scores) / len(bleu_scores)
 
