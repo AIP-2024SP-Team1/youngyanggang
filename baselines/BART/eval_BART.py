@@ -31,6 +31,15 @@ def calculate_bertscore(predictions, references):
     P, R, F1 = bert_score(predictions, references, lang="en", verbose=True)
     return F1.mean().item()
 
+# Calculate Self-BLEU
+def calculate_self_bleu(predictions):
+    bleu_scores = []
+    for pred in predictions:
+        other_preds = [p for p in predictions if p != pred]
+        bleu_score = sentence_bleu(other_preds, pred, smoothing_function=SmoothingFunction().method1)
+        bleu_scores.append(bleu_score)
+    return sum(bleu_scores) / len(bleu_scores)
+
 # Main evaluation function
 def evaluate(model, tokenizer, data):
     input_texts = data['context'].tolist()
@@ -40,10 +49,12 @@ def evaluate(model, tokenizer, data):
     
     rouge_l = calculate_rouge(predictions, references)
     bertscore_f1 = calculate_bertscore(predictions, references)
+    self_bleu = calculate_self_bleu(predictions)
     
     results = {
         "ROUGE-L": rouge_l,
-        "BERTScore_F1": bertscore_f1
+        "BERTScore_F1": bertscore_f1,
+        "Self-BLEU": self_bleu
     }
     
     return results
@@ -54,7 +65,7 @@ model = BartForConditionalGeneration.from_pretrained(model_name)
 tokenizer = BartTokenizer.from_pretrained(model_name)
 
 # Load your dataset
-data = load_data('../data/preprocessed_test.csv')
+data = load_data('./data/preprocessed_test.csv')
 
 # Evaluate
 results = evaluate(model, tokenizer, data)
