@@ -51,3 +51,18 @@ def selfbleu_eval(df):
     print('Self-BLEU:', bleu_list)
     
     return bleu_list
+
+def bertscore_eval(df):
+    bertscore = load("bertscore")
+    results = []
+
+    for j in df.index:
+        for c in df.loc[j, 'question']:
+            references = [c for i in range(len(df.loc[j, 'tot_gen']))]
+            predictions = df.loc[j, 'tot_gen']
+            result = bertscore.compute(predictions=predictions, references=references, model_type="roberta-large", device='cuda:0')
+            results.append(max(result['f1']))
+            
+    score = sum(results) / len(results)        
+    print('BERScore:', score)
+    return score
