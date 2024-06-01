@@ -818,7 +818,7 @@ class TextGenerationPipeline(Pipeline):
         **generate_kwargs
     ):
         """
-        Complete the (s) given as inputs.
+        Complete the prompt(s) given as inputs.
 
         Args:
             args (:obj:`str` or :obj:`List[str]`):
