@@ -66,3 +66,18 @@ def bertscore_eval(df):
     score = sum(results) / len(results)        
     print('BERScore:', score)
     return score
+
+def bleurt_eval(df):
+    bleurt = load("bleurt", "bleurt-20", module_type="metric")
+    results = []
+
+    for j in df.index:
+        for c in df.loc[j, 'question']:
+            references = [c for i in range(len(df.loc[j, 'tot_gen']))]
+            predictions = df.loc[j, 'tot_gen']
+            result = bleurt.compute(predictions=predictions, references=references)
+            results.append(max(result["scores"]))
+
+    score = sum(results) / len(results)        
+    print('BLEURT:', score)
+    return score
