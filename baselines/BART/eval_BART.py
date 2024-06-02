@@ -16,7 +16,7 @@ def load_data(file_path, sample_size=None):
     return data
 
 # Generate questions using BART
-def generate_questions(model, tokenizer, input_texts, max_length=50):
+def generate_questions(model, tokenizer, input_texts, max_length=128):
     questions = []
     for text in tqdm(input_texts, desc="Generating questions"):
         inputs = tokenizer.encode("Generate question: " + text, return_tensors='pt')
@@ -40,9 +40,9 @@ def calculate_bertscore(predictions, references):
 def calculate_self_bleu(predictions):
     smoothing_function = SmoothingFunction().method1
     bleu_scores = []
-    for pred in tqdm(predictions, desc="Calculating Self-BLEU"):
-        other_preds = [p for p in predictions if p != pred]
-        bleu_score = sentence_bleu([other_preds], pred, smoothing_function=smoothing_function)
+    for i, pred in enumerate(tqdm(predictions, desc="Calculating Self-BLEU")):
+        other_preds = [p for j, p in enumerate(predictions) if j != i]
+        bleu_score = sentence_bleu(other_preds, pred, smoothing_function=smoothing_function)
         bleu_scores.append(bleu_score)
     return sum(bleu_scores) / len(bleu_scores)
 
@@ -62,6 +62,7 @@ def evaluate(model, tokenizer, data):
     rouge_l = calculate_rouge(predictions, references)
     bertscore_f1 = calculate_bertscore(predictions, references)
     self_bleu = calculate_self_bleu(predictions)
+    bleurt = calculate_bleurt(predictions, references, bleurt_checkpoint='BLEURT-20/BLEURT-20')
     
     results = {
         "ROUGE-L": rouge_l,
@@ -78,7 +79,7 @@ model = BartForConditionalGeneration.from_pretrained(model_name)
 tokenizer = BartTokenizer.from_pretrained(model_name)
 
 # Load your dataset
-data = load_data('./data/preprocessed_test.csv', sample_size=300) 
+data = load_data('./data/preprocessed_test.csv', sample_size=500) 
 
 # Evaluate
 results = evaluate(model, tokenizer, data)
