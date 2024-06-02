@@ -22,13 +22,13 @@ def format_prompt(instruction, input=None):
 
     PROMPT_DICT = {
         "prompt_input": (
-            "The following instruction details a task, with additional context provided as input. "
-            "Formulate a response that effectively meets the request."
+            "An instruction for a task is presented below, paired with contextual input. "
+            "Write a response that appropriately meets the request."
             "### Instruction:\n{instruction}\n\n### Input:\n{input}\n\n### Response:"
         ),
         "prompt_no_input": (
-            "The following instruction details a task. "
-            "Formulate a response that effectively meets the request."
+            "An instruction for a task is presented below. "
+            "Write a response that appropriately meets the request."
             "### Instruction:\n{instruction}\n\n### Response:"
         ),
     }
