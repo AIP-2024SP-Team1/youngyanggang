@@ -15,9 +15,9 @@ model = BartForConditionalGeneration.from_pretrained('facebook/bart-base')
 def load_data(file_path):
     return pd.read_csv(file_path)
 
-train_data = load_data('/content/drive/My Drive/preprocessed_train.csv')
-val_data = load_data('/content/drive/My Drive/preprocessed_val.csv')
-test_data = load_data('/content/drive/My Drive/preprocessed_test.csv')
+train_data = load_data('./data/preprocessed_train.csv')
+val_data = load_data('./data/preprocessed_val.csv')
+test_data = load_data('./data/preprocessed_test.csv')
 
 # Convert datasets to Hugging Face datasets
 def convert_to_hf_dataset(data):
