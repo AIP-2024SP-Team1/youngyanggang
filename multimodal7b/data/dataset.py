@@ -20,13 +20,13 @@ except ImportError:
 
 PROMPT_DICT = {
     "prompt_input": (
-        "Below is an instruction that describes a task, paired with an input that provides further context. "
-        "Write a response that appropriately completes the request.\n\n"
+        "The instruction indicates the task to be performed. The input provides the context related to the task."
+        "The response should provide a proper, complete, and thorough answer to the request."
         "### Instruction:\n{instruction}\n\n### Input:\n{input}\n\n### Response:"
     ),
     "prompt_no_input": (
-        "Below is an instruction that describes a task. "
-        "Write a response that appropriately completes the request.\n\n"
+        "The instruction indicates the task to be performed."
+        "The response should provide a proper, complete, and thorough answer to the request."
         "### Instruction:\n{instruction}\n\n### Response:"
     ),
 }
