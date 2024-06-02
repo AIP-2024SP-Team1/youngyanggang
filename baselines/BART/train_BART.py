@@ -1,24 +1,36 @@
 import torch
 from transformers import BartTokenizer, BartForConditionalGeneration, Trainer, TrainingArguments
-from datasets import load_metric
+from datasets import load_dataset, load_metric
 from rouge_score import rouge_scorer
 import bert_score
 from bleurt import score as bleurt_score
 from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
-from preprocess import preprocess_data
-
-# Preprocess data
-train_path1 = './data/ftqa_wh_2_train1.xlsx'
-train_path2 = './data/ftqa_wh_2_train2.xlsx'
-val_path = './data/ftqa_wh_2_val1.xlsx'
-test_path = './data/ftqa_wh_2_test1.xlsx'
-output_dir = './data'
-datasets = preprocess_data(train_path1, train_path2, val_path, test_path, output_dir)
+import pandas as pd
 
 # Load BART tokenizer and model
 tokenizer = BartTokenizer.from_pretrained('facebook/bart-base')
 model = BartForConditionalGeneration.from_pretrained('facebook/bart-base')
 
+# Load datasets
+def load_data(file_path):
+    return pd.read_csv(file_path)
+
+train_data = load_data('/content/drive/My Drive/preprocessed_train.csv')
+val_data = load_data('/content/drive/My Drive/preprocessed_val.csv')
+test_data = load_data('/content/drive/My Drive/preprocessed_test.csv')
+
+# Convert datasets to Hugging Face datasets
+def convert_to_hf_dataset(data):
+    return {
+        'context': data['context'].tolist(),
+        'question': data['question'].tolist()
+    }
+
+train_dataset = convert_to_hf_dataset(train_data)
+val_dataset = convert_to_hf_dataset(val_data)
+test_dataset = convert_to_hf_dataset(test_data)
+
+# Preprocess function
 def preprocess_function(examples):
     inputs = examples['context']
     targets = examples['question']
@@ -27,8 +39,16 @@ def preprocess_function(examples):
     model_inputs['labels'] = labels
     return model_inputs
 
-# Tokenize data
-tokenized_datasets = datasets.map(preprocess_function, batched=True)
+# Tokenize datasets
+tokenized_train = preprocess_function(train_dataset)
+tokenized_val = preprocess_function(val_dataset)
+tokenized_test = preprocess_function(test_dataset)
+
+# Convert to dataset objects
+import datasets
+train_dataset = datasets.Dataset.from_dict(tokenized_train)
+val_dataset = datasets.Dataset.from_dict(tokenized_val)
+test_dataset = datasets.Dataset.from_dict(tokenized_test)
 
 # Training arguments
 training_args = TrainingArguments(
@@ -45,7 +65,7 @@ training_args = TrainingArguments(
 
 # Evaluation metrics
 rouge = load_metric('rouge')
-bleurt = bleurt_score.BleurtScorer("PATH_TO_BLEURT_CHECKPOINT")
+bleurt = bleurt_score.BleurtScorer("BLEURT-20/BLEURT-20")
 bertscore = load_metric('bertscore')
 
 def compute_metrics(eval_preds):
@@ -82,8 +102,8 @@ def compute_metrics(eval_preds):
 trainer = Trainer(
     model=model,
     args=training_args,
-    train_dataset=tokenized_datasets['train'],
-    eval_dataset=tokenized_datasets['validation'],
+    train_dataset=train_dataset,
+    eval_dataset=val_dataset,
     compute_metrics=compute_metrics
 )
 
@@ -96,11 +116,8 @@ val_results = trainer.evaluate()
 print("Validation Results:")
 print(val_results)
 
-# Evaluate the model on test1 and test2 sets
-test1_results = trainer.evaluate(eval_dataset=tokenized_datasets['test1'])
-test2_results = trainer.evaluate(eval_dataset=tokenized_datasets['test2'])
+# Evaluate the model on test set
+test_results = trainer.evaluate(eval_dataset=test_dataset)
 
-print("Test1 Results:")
-print(test1_results)
-print("Test2 Results:")
-print(test2_results)
+print("Test Results:")
+print(test_results)
