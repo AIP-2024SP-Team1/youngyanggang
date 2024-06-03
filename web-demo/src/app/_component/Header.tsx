@@ -1,6 +1,6 @@
 export default function Header() {
   return (
-    <header className="w-full max-w-12c mt-16 flex items-end justify-between">
+    <header className="w-full max-w-12c flex items-end justify-between">
       <a
         href="/"
         className="border-4 border-solid border-black w-20 h-16 rounded-br-3xl flex items-center justify-center"
