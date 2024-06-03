@@ -1,8 +1,11 @@
 export default function Header() {
   return (
-    <header className="w-full max-w-12c h-32 flex items-center justify-between">
-      <a href="/">
-        <h1 className="font-bold">
+    <header className="w-full max-w-12c mt-16 flex items-end justify-between">
+      <a
+        href="/"
+        className="border-4 border-solid border-black w-20 h-16 rounded-br-3xl flex items-center justify-center"
+      >
+        <h1 className="font-bold leading-4">
           YOUNG
           <br />
           YANG
