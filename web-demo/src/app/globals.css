@@ -2,3 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 @import "/fonts/pretendard.css";
+
+/* scrollbar styles */
+*::-webkit-scrollbar {
+  width: 8px; /* width of the entire scrollbar */
+}
+
+*::-webkit-scrollbar-track {
+  background: #f5f5f9; /* color of the tracking area */
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #999999; /* color of the scroll thumb */
+  border-radius: 4px; /* roundness of the scroll thumb */
+}
