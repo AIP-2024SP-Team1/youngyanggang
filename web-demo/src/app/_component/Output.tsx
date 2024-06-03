@@ -15,9 +15,10 @@ import {
 interface Props {
   output: OutputType;
   setOutputs: React.Dispatch<React.SetStateAction<OutputType[]>>;
+  setOpen: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
-export default function Output({ output, setOutputs }: Props) {
+export default function Output({ output, setOutputs, setOpen }: Props) {
   const onLike = () => {
     setOutputs((prev) => {
       const index = prev.findIndex((item) => item.id === output.id);
@@ -38,11 +39,15 @@ export default function Output({ output, setOutputs }: Props) {
 
   const onCopy = () => {
     navigator.clipboard.writeText(output.question);
-    alert("Copied to clipboard!");
+    alert("Copied question to clipboard!");
   };
 
   const onRemove = () => {
     setOutputs((prev) => prev.filter((item) => item.id !== output.id));
+  };
+
+  const onOpen = () => {
+    setOpen(output.id);
   };
 
   return (
@@ -80,7 +85,10 @@ export default function Output({ output, setOutputs }: Props) {
           />
         </menu>
       </div>
-      <div className="bg-white rounded-lg p-4 cursor-pointer hover:-translate-y-[2px] transition-all">
+      <div
+        className="bg-white rounded-lg p-4 cursor-pointer hover:-translate-y-[2px] transition-all"
+        onClick={onOpen}
+      >
         {output.question}
       </div>
     </div>

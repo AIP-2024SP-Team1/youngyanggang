@@ -6,6 +6,7 @@ import Output from "./_component/Output";
 import { ArrowRightCircleIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { OutputType } from "./_lib";
 import { useState } from "react";
+import OutputDetailModal from "./_component/OutputDetailModal";
 
 const outputs_sample: OutputType[] = [
   {
@@ -60,8 +61,9 @@ const outputs_sample: OutputType[] = [
 ];
 
 export default function Home() {
-  const [id, setId] = useState(8); // id starts from 8
   const [outputs, setOutputs] = useState<OutputType[]>(outputs_sample);
+  const [id, setId] = useState(8); // id starts from 8
+  const [open, setOpen] = useState<number | null>(null); // open modal id
 
   const onSubmit = () => {
     setOutputs((prev) => [
@@ -106,9 +108,15 @@ export default function Home() {
       <section className="flex-1 max-w-4c" />
       <main className="flex-[3] max-w-8c mx-auto py-16 flex flex-col gap-16">
         <Header />
+        {open && (
+          <OutputDetailModal
+            output={outputs.find((output) => output.id === open)!}
+            setOpen={setOpen}
+          />
+        )}
         <section className="flex flex-col gap-8">
           {outputs.map((output) => (
-            <Output output={output} setOutputs={setOutputs} />
+            <Output output={output} setOutputs={setOutputs} setOpen={setOpen} />
           ))}
         </section>
       </main>
