@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Header from "./_component/Header";
 
 export const metadata: Metadata = {
   title: "Multimodal7b Demo",
@@ -14,10 +13,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="flex min-h-[100dvh] w-full max-w-12c m-auto flex-col gap-12">
-        <Header />
-        {children}
-      </body>
+      <body className="flex bg-gray-50 min-h-[100dvh]">{children}</body>
     </html>
   );
 }
