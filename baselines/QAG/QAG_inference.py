@@ -244,8 +244,8 @@ def load_data(data_dir):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--model_name", type=str, help="like facebook/bart-large-cnn,t5-base, etc.")
-    parser.add_argument("--input_path", type=str, help="like cnn_dm/test.source")
-    parser.add_argument("--save_path", type=str, help="where to save summaries")
+    parser.add_argument("--data_dir", type=str, help="like cnn_dm/test.source")
+    parser.add_argument("--output_dir", type=str, help="where to save summaries")
     parser.add_argument("--reference_path", type=str, required=False, help="like cnn_dm/test.target")
     parser.add_argument("--score_path", type=str, required=False, default="metrics.json", help="where to save metrics")
     parser.add_argument("--device", type=str, required=False, default=DEFAULT_DEVICE, help="cuda, cuda:1, cpu etc.")
@@ -269,7 +269,6 @@ if __name__ == "__main__":
             type=str,
             help='path tooo stored model checkpoints',
         )
-    parser.add_argument("--output_dir", default="./", type=str)
     parser.add_argument("--model_name_or_path", type=str, default="facebook/bart-large", help="like facebook/bart-large-cnn,t5-base, etc.")
     parser.add_argument("--config_name", type=str, default="facebook/bart-large")
     parser.add_argument("--tokenizer_name", type=str, default="facebook/bart-large")
