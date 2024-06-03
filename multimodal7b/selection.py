@@ -88,3 +88,43 @@ def generate_question(answer, context):
 
 def round_trip_similarity(original_question, generated_question):
     return 1 if original_question.strip().lower() == generated_question.strip().lower() else 0
+
+def ranking(context, questions):
+    bi_gram_scores = [compute_bi_gram_similarity(context, q) for q in questions]
+    
+    round_trip_scores = []
+    for question in questions:
+        answer = generate_answer(question, context)
+        generated_question = generate_question(answer, context)
+        if generated_question[-1] == '.': generated_question = generated_question[:-1] + '?'
+        round_trip_scores.append(round_trip_similarity(question, generated_question))
+    
+    combined_scores = np.array(bi_gram_scores) + np.array(round_trip_scores)
+    
+    sorted_indices = np.argsort(-combined_scores)
+    sorted_questions = [questions[idx] for idx in sorted_indices]
+
+    return sorted_questions
+
+
+torch.cuda.empty_cache()
+
+result = pd.read_csv('./output/result.csv')
+contexts = result['context'][:225]
+questions = result['generated'][:225]
+selected = []
+
+for context, question in zip(contexts, questions):
+    items = re.split(r'\n\d+\.\s*', question)
+    generated = [item.replace("1. ", "") for item in items if item]
+
+    ranked_questions = ranking(context, generated)
+    print(ranked_questions)
+    selected.append("\n".join([f"{i+1}. {q}" for i, q in enumerate(ranked_questions)]))
+
+data = pd.DataFrame({
+    'context': contexts,
+    'selected': selected
+})
+
+data.to_csv('./output/selected.csv')
