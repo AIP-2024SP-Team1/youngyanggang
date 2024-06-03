@@ -164,3 +164,42 @@ cython_debug/
 
 *.pth
 *.out
+
+# web-demo
+
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+web-demo/node_modules
+web-demo/.pnp
+web-demo/.pnp.js
+web-demo/.yarn/install-state.gz
+
+# testing
+web-demo/coverage
+
+# next.js
+web-demo/.next/
+web-demo/out/
+
+# production
+web-demo/build
+
+# misc
+web-demo/.DS_Store
+web-demo/*.pem
+
+# debug
+web-demo/npm-debug.log*
+web-demo/yarn-debug.log*
+web-demo/yarn-error.log*
+
+# local env files
+web-demo/.env*.local
+
+# vercel
+web-demo/.vercel
+
+# typescript
+web-demo/*.tsbuildinfo
+web-demo/next-env.d.ts
