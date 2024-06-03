@@ -7,6 +7,10 @@ import {
   ClipboardIcon,
   MinusCircleIcon,
 } from "@heroicons/react/24/outline";
+import {
+  HandThumbDownIcon as HandThumbDownIconSolid,
+  HandThumbUpIcon as HandThumbUpIconSolid,
+} from "@heroicons/react/24/solid";
 
 interface Props {
   output: OutputType;
@@ -20,22 +24,20 @@ export default function Output({ output, setOutputs }: Props) {
       prev[index].like = true;
       return [...prev];
     });
-
     alert("Liked!");
   };
+
   const onDislike = () => {
     setOutputs((prev) => {
       const index = prev.findIndex((item) => item.id === output.id);
       prev[index].like = false;
       return [...prev];
     });
-
     alert("Disliked!");
   };
 
   const onCopy = () => {
     navigator.clipboard.writeText(output.question);
-
     alert("Copied to clipboard!");
   };
 
@@ -48,14 +50,26 @@ export default function Output({ output, setOutputs }: Props) {
       <div className="flex items-center justify-between p-2">
         <h3>Question {output.id}</h3>
         <menu className="flex gap-4">
-          <HandThumbUpIcon
-            className="w-4 h-4 cursor-pointer hover:scale-105"
-            onClick={onLike}
-          />
-          <HandThumbDownIcon
-            className="w-4 h-4 cursor-pointer hover:scale-105"
-            onClick={onDislike}
-          />
+          {output.like === null && (
+            <HandThumbUpIcon
+              className="w-4 h-4 cursor-pointer hover:scale-105"
+              onClick={onLike}
+            />
+          )}
+          {output.like === true && (
+            <HandThumbUpIconSolid className="w-4 h-4 text-neutral-400" />
+          )}
+
+          {output.like === null && (
+            <HandThumbDownIcon
+              className="w-4 h-4 cursor-pointer hover:scale-105"
+              onClick={onDislike}
+            />
+          )}
+          {output.like === false && (
+            <HandThumbDownIconSolid className="w-4 h-4 text-neutral-400" />
+          )}
+
           <ClipboardIcon
             className="w-4 h-4 cursor-pointer hover:scale-105"
             onClick={onCopy}
