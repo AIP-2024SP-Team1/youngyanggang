@@ -13,7 +13,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="flex bg-gray-50 min-h-[100dvh]">{children}</body>
+      <body className="flex bg-gray-50 min-h-[100dvh] text-gray-950">
+        {children}
+      </body>
     </html>
   );
 }
