@@ -38,26 +38,36 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const context = (await request.json()).context;
+  const context: string = (await request.json()).context;
   const data = await loadData();
   const row = data.find((row) => row.context === context);
 
-  //   const completion = await openai.chat.completions.create({
-  //     messages: [
-  //       {
-  //         role: "system",
-  //         content: "You are a helpful assistant designed to output JSON.",
-  //       },
-  //       { role: "user", content: "Who won the world series in 2020?" },
-  //     ],
-  //     model: "gpt-3.5-turbo-0125",
-  //     response_format: { type: "json_object" },
-  //   });
+  const completion = await openai.chat.completions.create({
+    messages: [
+      {
+        role: "system",
+        content: "You are a helpful assistant designed to output JSON.",
+      },
+      {
+        role: "user",
+        content: `For each question, generate appropriate answer paired considering the context.\ncontext: ${context}\n${row?.questions.map(
+          (question, idx) => `question ${idx}: ${question}`
+        )}`,
+      },
+    ],
+    model: "gpt-3.5-turbo-0125",
+    response_format: { type: "json_object" },
+  });
 
-  return NextResponse.json(
-    { questions: row?.questions },
-    {
-      status: 200,
-    }
-  );
+  const content = await JSON.parse(completion.choices[0].message.content!);
+
+  let qnas = content.answers;
+  if (!content.answers[0].question)
+    qnas = Object.values(content.answers).map((answer, idx) => ({
+      question: row?.questions[idx],
+      answer: answer,
+    }));
+
+  console.log(qnas);
+  return NextResponse.json({ qnas }, { status: 200 });
 }
