@@ -1,5 +1,7 @@
 import torch
 from transformers import BartTokenizer, BartForConditionalGeneration
+import random
+import pandas as pd
 
 def load_model(model_name='facebook/bart-base'):
     tokenizer = BartTokenizer.from_pretrained(model_name)
@@ -21,16 +23,25 @@ def predict(model, tokenizer, inputs, device='cuda'):
     
     return predictions
 
+def get_random_samples(data, num_samples=2):
+    return random.sample(data, num_samples)
+
+def load_data_from_csv(file_path):
+    df = pd.read_csv(file_path)
+    return df['context'].tolist()
+
 if __name__ == "__main__":
     # Load model and tokenizer
     model, tokenizer = load_model()
     
-    # Example inputs for inference
-    inputs = [
-        'Once upon a time, there was a little duckling who looked very different from the others.',
-        'The ugly duckling was very sad because he felt like he didn\'t belong.'
-    ]
+     # Load data from CSV
+    file_path = './data/preprocessed_test.csv' 
+    data = load_data_from_csv(file_path)
     
-    predictions = predict(model, tokenizer, inputs)
+    # Get random samples from the data
+    input_texts = get_random_samples(data, num_samples=5)
+    
+    # Make predictions
+    predictions = predict(model, tokenizer, input_texts)
     for input_text, prediction in zip(inputs, predictions):
         print(f"Input: {input_text}\nPrediction: {prediction}\n")
