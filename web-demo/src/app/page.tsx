@@ -1,8 +1,11 @@
+"use client";
+
 import Header from "./_component/Header";
 import Output from "./_component/Output";
 
 import { ArrowPathIcon } from "@heroicons/react/24/solid";
 import { OutputType } from "./_lib";
+import { useState } from "react";
 
 const outputs_sample: OutputType[] = [
   {
@@ -10,46 +13,62 @@ const outputs_sample: OutputType[] = [
     question: "What is the flax in full bloom?",
     answer:
       "The flax in full bloom is a plant with pretty little blue flowers, described as delicate as the wings of a moth. It is thriving under the sun and showers, which make it look even more beautiful and contribute to its growth, making it fine and long, ideal for producing a beautiful piece of linen. The flax is expressing its happiness and fortune due to its flourishing condition and the potential it holds for becoming something valuable.",
+    upvotes: 0,
+    downvotes: 0,
   },
   {
     id: 2,
     question: "What is the flax in full bloom?",
     answer:
       "The flax in full bloom is a plant with pretty little blue flowers, described as delicate as the wings of a moth. It is thriving under the sun and showers, which make it look even more beautiful and contribute to its growth, making it fine and long, ideal for producing a beautiful piece of linen. The flax is expressing its happiness and fortune due to its flourishing condition and the potential it holds for becoming something valuable.",
+    upvotes: 0,
+    downvotes: 0,
   },
   {
     id: 3,
     question: "What is the flax in full bloom?",
     answer:
       "The flax in full bloom is a plant with pretty little blue flowers, described as delicate as the wings of a moth. It is thriving under the sun and showers, which make it look even more beautiful and contribute to its growth, making it fine and long, ideal for producing a beautiful piece of linen. The flax is expressing its happiness and fortune due to its flourishing condition and the potential it holds for becoming something valuable.",
+    upvotes: 0,
+    downvotes: 0,
   },
   {
     id: 4,
     question: "What is the flax in full bloom?",
     answer:
       "The flax in full bloom is a plant with pretty little blue flowers, described as delicate as the wings of a moth. It is thriving under the sun and showers, which make it look even more beautiful and contribute to its growth, making it fine and long, ideal for producing a beautiful piece of linen. The flax is expressing its happiness and fortune due to its flourishing condition and the potential it holds for becoming something valuable.",
+    upvotes: 0,
+    downvotes: 0,
   },
   {
     id: 5,
     question: "What is the flax in full bloom?",
     answer:
       "The flax in full bloom is a plant with pretty little blue flowers, described as delicate as the wings of a moth. It is thriving under the sun and showers, which make it look even more beautiful and contribute to its growth, making it fine and long, ideal for producing a beautiful piece of linen. The flax is expressing its happiness and fortune due to its flourishing condition and the potential it holds for becoming something valuable.",
+    upvotes: 0,
+    downvotes: 0,
   },
   {
     id: 6,
     question: "What is the flax in full bloom?",
     answer:
       "The flax in full bloom is a plant with pretty little blue flowers, described as delicate as the wings of a moth. It is thriving under the sun and showers, which make it look even more beautiful and contribute to its growth, making it fine and long, ideal for producing a beautiful piece of linen. The flax is expressing its happiness and fortune due to its flourishing condition and the potential it holds for becoming something valuable.",
+    upvotes: 0,
+    downvotes: 0,
   },
   {
     id: 7,
     question: "What is the flax in full bloom?",
     answer:
       "The flax in full bloom is a plant with pretty little blue flowers, described as delicate as the wings of a moth. It is thriving under the sun and showers, which make it look even more beautiful and contribute to its growth, making it fine and long, ideal for producing a beautiful piece of linen. The flax is expressing its happiness and fortune due to its flourishing condition and the potential it holds for becoming something valuable.",
+    upvotes: 0,
+    downvotes: 0,
   },
 ];
 
 export default function Home() {
+  const [outputs, setOutputs] = useState<OutputType[]>(outputs_sample);
+
   return (
     <>
       <section className="fixed min-w-2c w-[25%] max-w-4c h-dvh p-8 flex flex-col gap-16 bg-white">
@@ -69,8 +88,8 @@ export default function Home() {
       <main className="flex-[3] max-w-8c mx-auto py-16 flex flex-col gap-16">
         <Header />
         <section className="flex flex-col gap-8">
-          {outputs_sample.map((output) => (
-            <Output output={output} />
+          {outputs.map((output) => (
+            <Output output={output} setOutputs={setOutputs} />
           ))}
         </section>
       </main>
