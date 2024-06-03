@@ -1,19 +1,14 @@
+import { OutputType } from "../_lib";
+
 import {
   HandThumbDownIcon,
   HandThumbUpIcon,
   ClipboardIcon,
-  ChatBubbleOvalLeftIcon,
   MinusCircleIcon,
 } from "@heroicons/react/24/outline";
 
-interface Output {
-  id: number;
-  question: string;
-  answer: string;
-}
-
 interface Props {
-  output: Output;
+  output: OutputType;
 }
 
 export default function Output({ output }: Props) {
@@ -25,11 +20,12 @@ export default function Output({ output }: Props) {
           <HandThumbDownIcon className="w-4 h-4 cursor-pointer hover:scale-105" />
           <HandThumbUpIcon className="w-4 h-4 cursor-pointer hover:scale-105" />
           <ClipboardIcon className="w-4 h-4 cursor-pointer hover:scale-105" />
-          <ChatBubbleOvalLeftIcon className="w-4 h-4 cursor-pointer hover:scale-105" />
           <MinusCircleIcon className="w-4 h-4 cursor-pointer hover:scale-105" />
         </menu>
       </div>
-      <div className="bg-white rounded-lg p-4">{output.question}</div>
+      <div className="bg-white rounded-lg p-4 cursor-pointer hover:-translate-y-[2px] transition-all">
+        {output.question}
+      </div>
     </div>
   );
 }
