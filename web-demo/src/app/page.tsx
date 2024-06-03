@@ -13,56 +13,49 @@ const outputs_sample: OutputType[] = [
     question: "What is the flax in full bloom?",
     answer:
       "The flax in full bloom is a plant with pretty little blue flowers, described as delicate as the wings of a moth. It is thriving under the sun and showers, which make it look even more beautiful and contribute to its growth, making it fine and long, ideal for producing a beautiful piece of linen. The flax is expressing its happiness and fortune due to its flourishing condition and the potential it holds for becoming something valuable.",
-    upvotes: 0,
-    downvotes: 0,
+    like: null,
   },
   {
     id: 2,
     question: "What is the flax in full bloom?",
     answer:
       "The flax in full bloom is a plant with pretty little blue flowers, described as delicate as the wings of a moth. It is thriving under the sun and showers, which make it look even more beautiful and contribute to its growth, making it fine and long, ideal for producing a beautiful piece of linen. The flax is expressing its happiness and fortune due to its flourishing condition and the potential it holds for becoming something valuable.",
-    upvotes: 0,
-    downvotes: 0,
+    like: null,
   },
   {
     id: 3,
     question: "What is the flax in full bloom?",
     answer:
       "The flax in full bloom is a plant with pretty little blue flowers, described as delicate as the wings of a moth. It is thriving under the sun and showers, which make it look even more beautiful and contribute to its growth, making it fine and long, ideal for producing a beautiful piece of linen. The flax is expressing its happiness and fortune due to its flourishing condition and the potential it holds for becoming something valuable.",
-    upvotes: 0,
-    downvotes: 0,
+    like: null,
   },
   {
     id: 4,
     question: "What is the flax in full bloom?",
     answer:
       "The flax in full bloom is a plant with pretty little blue flowers, described as delicate as the wings of a moth. It is thriving under the sun and showers, which make it look even more beautiful and contribute to its growth, making it fine and long, ideal for producing a beautiful piece of linen. The flax is expressing its happiness and fortune due to its flourishing condition and the potential it holds for becoming something valuable.",
-    upvotes: 0,
-    downvotes: 0,
+    like: null,
   },
   {
     id: 5,
     question: "What is the flax in full bloom?",
     answer:
       "The flax in full bloom is a plant with pretty little blue flowers, described as delicate as the wings of a moth. It is thriving under the sun and showers, which make it look even more beautiful and contribute to its growth, making it fine and long, ideal for producing a beautiful piece of linen. The flax is expressing its happiness and fortune due to its flourishing condition and the potential it holds for becoming something valuable.",
-    upvotes: 0,
-    downvotes: 0,
+    like: null,
   },
   {
     id: 6,
     question: "What is the flax in full bloom?",
     answer:
       "The flax in full bloom is a plant with pretty little blue flowers, described as delicate as the wings of a moth. It is thriving under the sun and showers, which make it look even more beautiful and contribute to its growth, making it fine and long, ideal for producing a beautiful piece of linen. The flax is expressing its happiness and fortune due to its flourishing condition and the potential it holds for becoming something valuable.",
-    upvotes: 0,
-    downvotes: 0,
+    like: null,
   },
   {
     id: 7,
     question: "What is the flax in full bloom?",
     answer:
       "The flax in full bloom is a plant with pretty little blue flowers, described as delicate as the wings of a moth. It is thriving under the sun and showers, which make it look even more beautiful and contribute to its growth, making it fine and long, ideal for producing a beautiful piece of linen. The flax is expressing its happiness and fortune due to its flourishing condition and the potential it holds for becoming something valuable.",
-    upvotes: 0,
-    downvotes: 0,
+    like: null,
   },
 ];
 
@@ -78,8 +71,7 @@ export default function Home() {
         question: "What is the flax in full bloom?",
         answer:
           "The flax in full bloom is a plant with pretty little blue flowers, described as delicate as the wings of a moth. It is thriving under the sun and showers, which make it look even more beautiful and contribute to its growth, making it fine and long, ideal for producing a beautiful piece of linen. The flax is expressing its happiness and fortune due to its flourishing condition and the potential it holds for becoming something valuable.",
-        upvotes: 0,
-        downvotes: 0,
+        like: null,
       },
     ]);
     setId((prev) => prev + 1);

@@ -14,23 +14,23 @@ interface Props {
 }
 
 export default function Output({ output, setOutputs }: Props) {
-  const onUpvote = () => {
+  const onLike = () => {
     setOutputs((prev) => {
       const index = prev.findIndex((item) => item.id === output.id);
-      prev[index].upvotes += 1;
+      prev[index].like = true;
       return [...prev];
     });
 
-    alert("Upvoted!");
+    alert("Liked!");
   };
-  const onDownvote = () => {
+  const onDislike = () => {
     setOutputs((prev) => {
       const index = prev.findIndex((item) => item.id === output.id);
-      prev[index].downvotes += 1;
+      prev[index].like = false;
       return [...prev];
     });
 
-    alert("Downvoted!");
+    alert("Disliked!");
   };
 
   const onCopy = () => {
@@ -50,11 +50,11 @@ export default function Output({ output, setOutputs }: Props) {
         <menu className="flex gap-4">
           <HandThumbUpIcon
             className="w-4 h-4 cursor-pointer hover:scale-105"
-            onClick={onUpvote}
+            onClick={onLike}
           />
           <HandThumbDownIcon
             className="w-4 h-4 cursor-pointer hover:scale-105"
-            onClick={onDownvote}
+            onClick={onDislike}
           />
           <ClipboardIcon
             className="w-4 h-4 cursor-pointer hover:scale-105"
