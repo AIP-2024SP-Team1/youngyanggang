@@ -19,28 +19,18 @@ export default function Home() {
 
   const onSubmit = async () => {
     const qnas = (await generate(context)).qnas;
-    setOutputs((prev) => [
-      ...prev,
-      {
-        id: id,
-        question: qnas[0].question,
-        answer: qnas[0].answer,
-        like: null,
-      },
-      {
-        id: id + 1,
-        question: qnas[1].question,
-        answer: qnas[1].answer,
-        like: null,
-      },
-      {
-        id: id + 2,
-        question: qnas[2].question,
-        answer: qnas[2].answer,
-        like: null,
-      },
-    ]);
-    setId((prev) => prev + 3);
+    qnas.forEach((qna, idx) => {
+      setOutputs((prev) => [
+        ...prev,
+        {
+          id: id + idx,
+          question: qna.question,
+          answer: qna.answer,
+          like: null,
+        },
+      ]);
+    });
+    setId((prev) => prev + qnas.length);
   };
 
   const onClear = () => {

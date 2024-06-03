@@ -1,3 +1,4 @@
+import { randomInt } from "crypto";
 import csv from "csv-parser";
 import fs from "fs";
 import { NextResponse } from "next/server";
@@ -34,13 +35,23 @@ async function loadData(): Promise<Row[]> {
 
 export async function GET(request: Request) {
   const data = await loadData();
-  return NextResponse.json(data, { status: 200 });
+  const idx = randomInt(0, data.length - 1);
+  return NextResponse.json(data[idx], { status: 200 });
 }
 
 export async function POST(request: Request) {
   const context: string = (await request.json()).context;
   const data = await loadData();
   const row = data.find((row) => row.context === context);
+  console.log(row?.questions);
+
+  const input = `For each question, generate appropriate answer paired considering the context.
+### Context:
+${context}
+### Questions:
+${row?.questions.map((question, idx) => `question ${idx}: ${question}\n`)}
+### Response
+qnas: { question: string; answer: string; }[];`;
 
   const completion = await openai.chat.completions.create({
     messages: [
@@ -50,24 +61,17 @@ export async function POST(request: Request) {
       },
       {
         role: "user",
-        content: `For each question, generate appropriate answer paired considering the context.\ncontext: ${context}\n${row?.questions.map(
-          (question, idx) => `question ${idx}: ${question}`
-        )}`,
+        content: input,
       },
     ],
     model: "gpt-3.5-turbo-0125",
     response_format: { type: "json_object" },
   });
 
-  const content = await JSON.parse(completion.choices[0].message.content!);
+  const generated = await JSON.parse(completion.choices[0].message.content!);
+  console.log(generated);
 
-  let qnas = content.answers;
-  if (!content.answers[0]?.question)
-    qnas = Object.values(content.answers).map((answer, idx) => ({
-      question: row?.questions[idx],
-      answer: answer,
-    }));
+  const qnas = Object.values(generated.qnas);
 
-  console.log(qnas);
   return NextResponse.json({ qnas }, { status: 200 });
 }
