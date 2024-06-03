@@ -11,8 +11,8 @@ import pandas as pd
 from allennlp.predictors.predictor import Predictor
 import spacy
 
-from .lightning_base import BaseTransformer
-from .utils import (
+from QAG_Generation_E2E.lightning_base import BaseTransformer
+from QAG_Generation_E2E.utils import (
     ROUGE_KEYS,
     freeze_params,
     lmap,
