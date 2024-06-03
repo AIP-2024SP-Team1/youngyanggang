@@ -7,81 +7,49 @@ import { ArrowRightCircleIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { OutputType } from "./_lib";
 import { useState } from "react";
 import OutputDetailModal from "./_component/OutputDetailModal";
-
-const outputs_sample: OutputType[] = [
-  {
-    id: 1,
-    question: "What is the flax in full bloom?",
-    answer:
-      "The flax in full bloom is a plant with pretty little blue flowers, described as delicate as the wings of a moth. It is thriving under the sun and showers, which make it look even more beautiful and contribute to its growth, making it fine and long, ideal for producing a beautiful piece of linen. The flax is expressing its happiness and fortune due to its flourishing condition and the potential it holds for becoming something valuable.",
-    like: null,
-  },
-  {
-    id: 2,
-    question: "What is the flax in full bloom?",
-    answer:
-      "The flax in full bloom is a plant with pretty little blue flowers, described as delicate as the wings of a moth. It is thriving under the sun and showers, which make it look even more beautiful and contribute to its growth, making it fine and long, ideal for producing a beautiful piece of linen. The flax is expressing its happiness and fortune due to its flourishing condition and the potential it holds for becoming something valuable.",
-    like: null,
-  },
-  {
-    id: 3,
-    question: "What is the flax in full bloom?",
-    answer:
-      "The flax in full bloom is a plant with pretty little blue flowers, described as delicate as the wings of a moth. It is thriving under the sun and showers, which make it look even more beautiful and contribute to its growth, making it fine and long, ideal for producing a beautiful piece of linen. The flax is expressing its happiness and fortune due to its flourishing condition and the potential it holds for becoming something valuable.",
-    like: null,
-  },
-  {
-    id: 4,
-    question: "What is the flax in full bloom?",
-    answer:
-      "The flax in full bloom is a plant with pretty little blue flowers, described as delicate as the wings of a moth. It is thriving under the sun and showers, which make it look even more beautiful and contribute to its growth, making it fine and long, ideal for producing a beautiful piece of linen. The flax is expressing its happiness and fortune due to its flourishing condition and the potential it holds for becoming something valuable.",
-    like: null,
-  },
-  {
-    id: 5,
-    question: "What is the flax in full bloom?",
-    answer:
-      "The flax in full bloom is a plant with pretty little blue flowers, described as delicate as the wings of a moth. It is thriving under the sun and showers, which make it look even more beautiful and contribute to its growth, making it fine and long, ideal for producing a beautiful piece of linen. The flax is expressing its happiness and fortune due to its flourishing condition and the potential it holds for becoming something valuable.",
-    like: null,
-  },
-  {
-    id: 6,
-    question: "What is the flax in full bloom?",
-    answer:
-      "The flax in full bloom is a plant with pretty little blue flowers, described as delicate as the wings of a moth. It is thriving under the sun and showers, which make it look even more beautiful and contribute to its growth, making it fine and long, ideal for producing a beautiful piece of linen. The flax is expressing its happiness and fortune due to its flourishing condition and the potential it holds for becoming something valuable.",
-    like: null,
-  },
-  {
-    id: 7,
-    question: "What is the flax in full bloom?",
-    answer:
-      "The flax in full bloom is a plant with pretty little blue flowers, described as delicate as the wings of a moth. It is thriving under the sun and showers, which make it look even more beautiful and contribute to its growth, making it fine and long, ideal for producing a beautiful piece of linen. The flax is expressing its happiness and fortune due to its flourishing condition and the potential it holds for becoming something valuable.",
-    like: null,
-  },
-];
+import { generate } from "./_lib/api";
 
 export default function Home() {
-  const [outputs, setOutputs] = useState<OutputType[]>(outputs_sample);
-  const [id, setId] = useState(8); // id starts from 8
-  const [open, setOpen] = useState<number | null>(null); // open modal id
+  const [id, setId] = useState(0);
+  const [outputs, setOutputs] = useState<OutputType[]>([]);
+  const [context, setContext] = useState(
+    'THE flax was in full bloom. It had pretty little blue flowers, as delicate as the wings of a moth. The sun shone on it and the showers watered it. This was as good for the flax as it is for little children to be washed and then kissed by their mothers. They look much prettier for it, and so did the flax. "People say that I look exceedingly well," said the flax, "and that I am so fine and long that I shall make a beautiful piece of linen. How fortunate I am! It makes me so happy to know that something can be made of me. How the sunshine cheers me, and how sweet and refreshing is the rain! My happiness overpowers me! No one in the world can feel happier than I."'
+  );
+  const [open, setOpen] = useState<number | null>(null);
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
+    const qnas = (await generate(context)).qnas;
     setOutputs((prev) => [
       ...prev,
       {
-        id,
-        question: "What is the flax in full bloom?",
-        answer:
-          "The flax in full bloom is a plant with pretty little blue flowers, described as delicate as the wings of a moth. It is thriving under the sun and showers, which make it look even more beautiful and contribute to its growth, making it fine and long, ideal for producing a beautiful piece of linen. The flax is expressing its happiness and fortune due to its flourishing condition and the potential it holds for becoming something valuable.",
+        id: id,
+        question: qnas[0].question,
+        answer: qnas[0].answer,
+        like: null,
+      },
+      {
+        id: id + 1,
+        question: qnas[1].question,
+        answer: qnas[1].answer,
+        like: null,
+      },
+      {
+        id: id + 2,
+        question: qnas[2].question,
+        answer: qnas[2].answer,
         like: null,
       },
     ]);
-    setId((prev) => prev + 1);
+    setId((prev) => prev + 3);
   };
 
   const onClear = () => {
     if (!confirm("Are you sure you want to clear all questions?")) return;
     setOutputs([]);
+  };
+
+  const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setContext(event.target.value);
   };
 
   return (
@@ -102,13 +70,14 @@ export default function Home() {
           name="context"
           id="context"
           rows={20}
-          defaultValue={`THE flax was in full bloom. It had pretty little blue flowers, as delicate as the wings of a moth. The sun shone on it and the showers watered it. This was as good for the flax as it is for little children to be washed and then kissed by their mothers. They look much prettier for it, and so did the flax. "People say that I look exceedingly well," said the flax, "and that I am so fine and long that I shall make a beautiful piece of linen. How fortunate I am! It makes me so happy to know that something can be made of me. How the sunshine cheers me, and how sweet and refreshing is the rain! My happiness overpowers me! No one in the world can feel happier than I."`}
+          value={context}
+          onChange={onChange}
         />
       </section>
       <section className="flex-1 max-w-4c" />
       <main className="flex-[3] max-w-8c mx-auto py-16 flex flex-col gap-16">
         <Header />
-        {open && (
+        {open !== null && (
           <OutputDetailModal
             output={outputs.find((output) => output.id === open)!}
             setOpen={setOpen}
