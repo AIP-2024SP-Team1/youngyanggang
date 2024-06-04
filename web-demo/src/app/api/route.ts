@@ -36,7 +36,7 @@ async function loadData(): Promise<Row[]> {
 export async function GET(request: Request) {
   const data = await loadData();
   const idx = randomInt(0, data.length - 1);
-  return NextResponse.json(data[idx], { status: 200 });
+  return NextResponse.json(data[idx].context, { status: 200 });
 }
 
 export async function POST(request: Request) {
